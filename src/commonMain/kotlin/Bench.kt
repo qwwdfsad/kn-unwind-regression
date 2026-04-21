@@ -53,59 +53,6 @@ class Bench {
         }
     }
 
-    @Benchmark
-    fun plainPrebuiltExceptionWithRecursion() {
-        val exception = TestException()
-        try {
-            plainRecursionThrowExisting(depthValue, exception)
-        } catch (_: TestException) {
-        }
-    }
-
-    @Benchmark
-    fun constructExceptionAtLeafThenThrowAtTop() {
-        try {
-            throw plainRecursionCreateException(depthValue)
-        } catch (_: TestException) {
-        }
-    }
-
-    @Benchmark
-    fun suspendExceptionWithRecursion() = runBlocking {
-        launch {
-            try {
-                suspendRecursionThrow(depthValue)
-            } catch (_: TestException) {
-            }
-        }
-    }
-
-    @Benchmark
-    fun cancellationExceptionWithRecursion() {
-        try {
-            plainRecursionThrowCancellation(depthValue)
-        } catch (_: CancellationException) {
-        }
-    }
-
-    @Benchmark
-    fun prebuiltCancellationExceptionWithRecursion() {
-        val exception = CancellationException()
-        try {
-            plainRecursionThrowExistingCancellation(depthValue, exception)
-        } catch (_: CancellationException) {
-        }
-    }
-
-    private suspend fun suspendRecursionWithYields(depth: Int) {
-        if (depth == 0) {
-            yield()
-            yield()
-        } else {
-            suspendRecursionWithYields(depth - 1)
-        }
-    }
-
     private fun plainRecursionThrow(depth: Int) {
         if (depth == 0) {
             throw TestException()
@@ -119,41 +66,6 @@ class Bench {
             TestException()
         } else {
             plainRecursionCreateException(depth - 1)
-        }
-    }
-
-    private fun plainRecursionThrowExisting(depth: Int, exception: TestException) {
-        if (depth == 0) {
-            throw exception
-        } else {
-            plainRecursionThrowExisting(depth - 1, exception)
-        }
-    }
-
-    private suspend fun suspendRecursionThrow(depth: Int) {
-        if (depth == 0) {
-            throw TestException()
-        } else {
-            suspendRecursionThrow(depth - 1)
-        }
-    }
-
-    private fun plainRecursionThrowCancellation(depth: Int) {
-        if (depth == 0) {
-            throw CancellationException()
-        } else {
-            plainRecursionThrowCancellation(depth - 1)
-        }
-    }
-
-    private fun plainRecursionThrowExistingCancellation(
-        depth: Int,
-        exception: CancellationException,
-    ) {
-        if (depth == 0) {
-            throw exception
-        } else {
-            plainRecursionThrowExistingCancellation(depth - 1, exception)
         }
     }
 }
