@@ -48,16 +48,6 @@ class RegressionIsolationBenchmarks {
     }
 
     @Benchmark
-    fun constructExceptionNoRecursionVolatile() {
-        volatileThrowableSink = TestException()
-    }
-
-    @Benchmark
-    fun constructExceptionWithRecursionVolatile() {
-        volatileThrowableSink = plainRecursionCreateException(depthValue)
-    }
-
-    @Benchmark
     fun plainExceptionWithRecursion() {
         try {
             plainRecursionThrow(depthValue)
@@ -171,6 +161,3 @@ class RegressionIsolationBenchmarks {
 }
 
 private class TestException : Exception()
-
-@Volatile
-private var volatileThrowableSink: Throwable? = null
