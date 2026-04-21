@@ -31,9 +31,9 @@ fun main(args: Array<String>) {
         }
 
         "bench-fresh-ref" -> {
-            val benchmark = RegressionIsolationBenchmarks().also { it.depthValue = depth }
-            val fn: (RegressionIsolationBenchmarks) -> Unit =
-                RegressionIsolationBenchmarks::plainExceptionWithRecursion
+            val benchmark = Bench().also { it.depthValue = depth }
+            val fn: (Bench) -> Unit =
+                Bench::plainExceptionWithRecursion
             repeat(iterations) {
                 fn(benchmark)
             }
